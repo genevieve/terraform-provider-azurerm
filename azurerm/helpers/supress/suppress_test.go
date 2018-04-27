@@ -1,6 +1,9 @@
 package supress
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestInternal_Suppress_CaseDifference(t *testing.T) {
 	cases := []struct {
@@ -74,14 +77,17 @@ func TestInternal_Supress_Rfc3339Time(t *testing.T) {
 			Suppress: true,
 		},
 		{
-			TimeA:    "2000-01-01T01:23:45+7:00",
-			TimeB:    "2000-01-01T08:23:45Z",
+			TimeA:    "2000-01-01T01:23:45-08:00",
+			TimeB:    "2000-01-01T09:23:45Z",
 			Suppress: true,
 		},
 	}
 
 	for _, tc := range cases {
 		if Rfc3339Time("test", tc.TimeA, tc.TimeB, nil) != tc.Suppress {
+			a, _ :=time.Parse(time.RFC3339, tc.TimeA)
+			b, _ := time.Parse(time.RFC3339, tc.TimeB)
+			t.Fatalf("Expected Rfc3339Time to return %t for '%s' == '%s'", tc.Suppress, a.Format(time.RFC3339), b.Format(time.RFC3339))
 			t.Fatalf("Expected Rfc3339Time to return %t for '%s' == '%s'", tc.Suppress, tc.TimeA, tc.TimeB)
 		}
 	}

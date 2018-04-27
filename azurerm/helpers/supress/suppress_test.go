@@ -2,7 +2,6 @@ package supress
 
 import (
 	"testing"
-	"time"
 )
 
 func TestInternal_Suppress_CaseDifference(t *testing.T) {
@@ -85,9 +84,6 @@ func TestInternal_Supress_Rfc3339Time(t *testing.T) {
 
 	for _, tc := range cases {
 		if Rfc3339Time("test", tc.TimeA, tc.TimeB, nil) != tc.Suppress {
-			a, _ :=time.Parse(time.RFC3339, tc.TimeA)
-			b, _ := time.Parse(time.RFC3339, tc.TimeB)
-			t.Fatalf("Expected Rfc3339Time to return %t for '%s' == '%s'", tc.Suppress, a.Format(time.RFC3339), b.Format(time.RFC3339))
 			t.Fatalf("Expected Rfc3339Time to return %t for '%s' == '%s'", tc.Suppress, tc.TimeA, tc.TimeB)
 		}
 	}
